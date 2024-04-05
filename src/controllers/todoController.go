@@ -44,10 +44,7 @@ func GetATodo(c *gin.Context) {
 func UpdateATodo(c *gin.Context) {
 	var todo models.Todo
 	id := c.Params.ByName("id")
-	err := models.GetATodo(&todo, id)
-	if err != nil {
-		c.JSON(http.StatusNotFound, todo)
-	}
+	var err error
 
 	c.BindJSON(&todo)
 	err = models.UpdateATodo(&todo, id)

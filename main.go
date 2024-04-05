@@ -5,6 +5,7 @@ import (
 	"gin-todoapp/src/config"
 	"gin-todoapp/src/models"
 	"gin-todoapp/src/routes"
+	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 )
 
@@ -24,7 +25,10 @@ func main() {
 	config.DB.AutoMigrate(&models.Todo{})
 
 	//setup routes
-	r := routes.SetupRouter()
+	r := gin.Default()
+
+	routes.SetupUserRoutes(r)
+	routes.SetupTodosRouter(r)
 
 	// running
 	r.Run()

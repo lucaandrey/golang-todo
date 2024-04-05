@@ -1,7 +1,6 @@
 package models
 
 import (
-	"fmt"
 	"gin-todoapp/src/config"
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -29,12 +28,19 @@ func GetATodo(todo *Todo, id string) (err error) {
 }
 
 func UpdateATodo(todo *Todo, id string) (err error) {
-	fmt.Println(todo)
-	config.DB.Save(todo)
+	if err := config.DB.Where("id = ?", id).First(todo).Error; err != nil {
+		return err
+	}
+
+	if err = config.DB.Model(&Todo{}).Where("id = ?", id).Updates(todo).Error; err != nil {
+		return err
+	}
 	return nil
 }
 
 func DeleteATodo(todo *Todo, id string) (err error) {
-	config.DB.Where("id = ?", id).Delete(todo)
+	if err := config.DB.Where("id = ?", id).Delete(todo).Error; err != nil {
+		return err
+	}
 	return nil
 }
